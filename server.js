@@ -1,119 +1,137 @@
-
-
-var http = require('http')
-var path = require('path')
-var fs = require('fs')
-var url = require('url')
-
-function staticRoot(staticPath, req, res){
-	console.log('staticPath:' + staticPath)
-	console.log('staticPath2:' + path.join(__dirname, 'sample'))
-	console.log('当前目录：' + __dirname)
-	console.log('req.url' + req.url)
-
-	var pathObj = url.parse(req.url, true)
-	console.log(pathObj)
-	if(pathObj.pathname === '/'){
-		pathObj.pathname += 'index.html'
-	}
-
-	var filePath = path.join(staticPath, pathObj.pathname)
-	// var fileContent = fs.readFileSync(filePath, 'binary')
-
-	fs.readFile(filePath, 'binary', function(error, fileContent){
-		if(error){
-			console.log('404')
-			res.writeHead(404, 'not found')
-			res.end('<h1>404 Not Found</h1>')
-		}else{
-			console.log('ok')
-			res.writeHead(200,'OK')
-			res.write(fileContent, 'binary')
-			res.end()
-		}
-	})
-}
-
-console.log(path.join(__dirname, 'sample'))
-
-var server = http.createServer(function(req, res){
-	staticRoot(path.join(__dirname, 'sample'), req, res)
-})
-
-server.listen(8080)
-console.log('visit http://localhost:8080')
-
-// 
-// 
-// // 
 // var http = require('http')
-// var url = require('url')
+// var server = http.createServer(function(request,response){
+// 	setTimeout(function(){
+// 		response.setHeader('Content-Type','text/plain; charset=utf-8')
+// 		response.writeHead(200, 'ok')
+// 		response.write('<html><head><meta charset="gbk" /><head>')
+// 		response.write('<body>')
+// 		response.write('<h1>HELLO!</h1></body></html>')
+// 		response.end()
+// 	},2000)
+// })
+// console.log('open http://localhost:8080')
+// server.listen(8080)           
+// 
+
+// var http = require('http')
 // var path = require('path')
 // var fs = require('fs')
-// // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// var server = http.createServer(function(request, response){
-// 	routePath(request, response)
-// }).listen(8080)
-// console.log('visit http://localhost:8080')
-// // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// var routes = {
-// 	'/a': function(request, response){
-// 		response.end(JSON.stringify(request.query))
-// 	},
-// 	'/b': function(request, response){
-// 		response.end('match /b')
-// 	},
-// 	'/c': function(request, response){
-// 		response.end('match /c')
-// 	},
-// 	'/search': function(request, response){
-// 		response.end('username='+request.body.username+',password'+request.body.password)
-// 	}
-// }
-// // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// function routePath(request, response){
-// 	var pathObj = url.parse(request.url, true)
-// 	var handleFn = routes[pathObj.pathname]
-// 	if (handleFn){
-// 		request.query = pathObj.query
-		
-// 		var body = ''
-// 		request.on('error', function(err){
-// 			console.error(err)
-// 		}).on('data', function(chunk){
-// 			body += chunk
-// 		}).on('end', function(){
-// 			request.body = parseBody(body)
-// 			handleFn(request, response)
-// 		})
+// var url = require('url')
 
-// 	}else{
-// 		staticRoot(path.join(__dirname, 'sample'), request, response)
+// function staticRoot(staticPath, req, res){
+// 	console.log('staticPath:' + staticPath)
+// 	console.log('staticPath2:' + path.join(__dirname, 'sample'))
+// 	console.log('当前目录：' + __dirname)
+// 	console.log('req.url' + req.url)
+
+// 	var pathObj = url.parse(req.url, true)
+// 	console.log(pathObj)
+// 	if(pathObj.pathname === '/'){
+// 		pathObj.pathname += 'test.html'
 // 	}
-// }
-// // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// function staticRoot(staticPath, request, response){
-// 	var pathObj = url.parse(request.url, true)
+
 // 	var filePath = path.join(staticPath, pathObj.pathname)
-// 	if(pathObj.pathname === '/'){pathObj.pathname += '/index.html'}
-// 	fs.readFile(filePath, 'binary', function(err, content){
-// 		if(err){
-// 			response.writeHead(404, 'Not Found!')
-// 			return response.end()
+
+// 	// var fileContent = fs.readFileSync(filePath, 'binary')
+// 	// res.write(fileContent, 'binary')
+// 	// res.end()
+
+// 	fs.readFile(filePath, 'binary', function(error, fileContent){
+// 		if(error){
+// 			console.log('404')
+// 			res.writeHead(404, 'not found')
+// 			res.end('<h1>404 Not Found</h1>')
 // 		}else{
-// 			response.writeHead(200,'OK')
-// 			response.write(content, 'binary')
-// 			response.end()
+// 			console.log('ok')
+// 			res.writeHead(200,'OK')
+// 			res.write(fileContent, 'binary')
+// 			res.end()
 // 		}
 // 	})
-	
 // }
-// // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// function parseBody(body){
-// 	console.log(body)
-// 	var obj = {}
-// 	body.split('&').forEach(function(str){
-// 		obj[str.split('='[0])] = str.split('=')[1]
-// 	})
-// 	return obj
-// }
+
+// console.log(path.join(__dirname, 'sample'))
+
+// var server = http.createServer(function(req, res){
+// 	staticRoot(path.join(__dirname, 'sample'), req, res)
+// })
+
+// server.listen(8080)
+// console.log('visit http://localhost:8080')
+// 
+// 
+// 
+// 
+var http = require('http')
+var path = require('path')
+var url = require('url')
+var fs = require('fs')
+ 
+ var routes = {
+ 	'/a': function(req, res){
+ 		res.end(JSON.stringify(req.query))
+ 	},
+ 	'/b': function(req, res){
+ 		res.end('match /b')
+ 	},
+ 	'/c': function(req, res){
+ 		res.end('match /c/123')
+ 	},
+ 	'/login': function(req, res){
+ 		res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+ 		res.end('username='+req.body.username+',password='+req.body.password)
+ 	}
+ }
+
+ var server = http.createServer(function(req, res){
+ 	routePath(req, res)
+ }).listen(8080)
+ console.log('visti http://localhost:8080')
+
+ function routePath(req, res){
+ 	var pathObj = url.parse(req.url, true)
+ 	var handleFn = routes[pathObj.pathname]
+ 	if(handleFn){
+ 		req.query = pathObj.query
+ 		//method is 'POST'
+ 		var body = ''
+ 		req.on('error', function(err){
+ 			console.error(err)
+ 		}).on('data', function(chunk){
+ 			body += chunk
+ 		}).on('end', function(){
+ 			req.body = parseBody(body)
+ 			handleFn(req, res)
+ 		})
+ 	}else {
+ 		staticRoot(path.resolve(__dirname, 'sample'), req, res)
+ 	}
+
+ }
+ function staticRoot(staticPath, req, res){
+ 	var pathObj = url.parse(req.url, true)
+ 	if(pathObj.pathname === '/'){
+ 		pathObj.pathname += 'index.html'
+ 	}
+ 	var filePath = path.join(staticPath, pathObj.pathname)
+ 	fs.readFile(filePath, 'binary',function(err,content){
+ 		if(err){
+ 			res.setHeader('Content-Type', 'text/html; charset=utf-8')
+ 			res.writeHead(404,'Not Found')
+ 			return res.end('<h1>访问的文件不存在!</h1>')
+ 		}else{
+ 			res.writeHead(200, 'OK')
+ 			res.write(content, 'binary') 
+ 			res.end()
+ 		}
+ 	})
+ }
+ function parseBody(body){
+ 	console.log(body)
+ 	var obj = {}
+ 	body.split('&').forEach(function(str){
+ 		obj[str.split('=')[0]] = str.split('=')[1]
+ 	})
+ 	console.log(obj)
+ 	return obj
+ }
